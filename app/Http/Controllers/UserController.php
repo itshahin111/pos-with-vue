@@ -33,7 +33,7 @@ class UserController extends Controller
             $email = $request->input('email');
             $name = $request->input('name');
             $mobile = $request->input('mobile');
-            $password = Hash::make($request->input('password')); // Hash the password
+            $password = ($request->input('password')); // Hash the password
 
 
             User::create([
