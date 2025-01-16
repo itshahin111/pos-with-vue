@@ -93,7 +93,7 @@ class UserController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'User Logout Successfully',
-        ], 200)->cookie('token', '', -1, null, null, true, true);
+        ], 200)->cookie('token', '', -1);
         // return redirect('/')->cookie('token','',-1);
 
     }
