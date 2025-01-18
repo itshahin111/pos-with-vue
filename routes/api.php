@@ -36,5 +36,14 @@ Route::group(['middleware' => TokenVerificationApiMiddleware::class], function (
     Route::put('/update-customer', [CustomerController::class, 'customerUpdate'])->name('customerUpdate');
     Route::delete('/delete-customer', [CustomerController::class, 'customerDestroy'])->name('customerDestroy');
 
+
+    //Product Route
+    Route::post('/store-product', [ProductController::class, 'storeProduct'])->name('customerStore');
+    Route::get('/show-products', [ProductController::class, 'showProducts'])->name('showCustomers');
+    Route::post('/edit-product', [ProductController::class, 'editProduct'])->name('customerEdit');
+    Route::put('/update-product', [ProductController::class, 'updateProduct'])->name('customerUpdate');
+    Route::delete('/delete-product', [ProductController::class, 'destroyProduct'])->name('customerDestroy');
+
+
 });
 
