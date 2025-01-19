@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
@@ -35,12 +36,20 @@ Route::group(['middleware' => TokenVerificationMiddleware::class], function () {
     Route::delete('/delete-customer', [CustomerController::class, 'customerDestroy'])->name('customerDestroy');
 
 
-     //Product Route
-     Route::post('/store-product', [ProductController::class, 'storeProduct'])->name('customerStore');
-     Route::get('/show-products', [ProductController::class, 'showProducts'])->name('showCustomers');
-     Route::post('/edit-product', [ProductController::class, 'editProduct'])->name('customerEdit');
-     Route::put('/update-product', [ProductController::class, 'updateProduct'])->name('customerUpdate');
-     Route::delete('/delete-product', [ProductController::class, 'destroyProduct'])->name('customerDestroy');
+    //Product Route
+    Route::post('/store-product', [ProductController::class, 'storeProduct'])->name('customerStore');
+    Route::get('/show-products', [ProductController::class, 'showProducts'])->name('showCustomers');
+    Route::post('/edit-product', [ProductController::class, 'editProduct'])->name('customerEdit');
+    Route::put('/update-product', [ProductController::class, 'updateProduct'])->name('customerUpdate');
+    Route::delete('/delete-product', [ProductController::class, 'destroyProduct'])->name('customerDestroy');
+
+
+    // Invoice Route
+    Route::post('/invoice-create', [InvoiceController::class, 'invoiceCreate'])->name('invoiceCreate');
+    Route::get('/invoice-show', [InvoiceController::class, 'invoiceShow'])->name('invoiceShow');
+    Route::post('/invoice-details', [InvoiceController::class, 'invoiceDetails'])->name('invoiceDetails');
+    Route::delete('/invoice-delete', [InvoiceController::class, 'invoiceDestroy'])->name('invoiceDestroy');
+
 
 });
 
