@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Inertia\Inertia;
 use App\Models\Invoice;
 use App\Models\Customer;
 use Illuminate\Http\Request;
@@ -11,6 +12,13 @@ use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
+    function salePage(){
+        return Inertia::render('SalePage');
+    }
+    function invoicePage()
+    {
+        return Inertia::render('InvoiceListPage');
+    }
     function invoiceCreate(Request $request)
     {
         DB::beginTransaction();

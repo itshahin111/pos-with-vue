@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
 
+
+    function productPage()
+    {
+        return Inertia::render('ProductPage');
+    }
 
     function storeProduct(Request $request)
     {

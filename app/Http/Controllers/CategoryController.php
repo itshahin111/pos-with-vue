@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+
+    function categoryPage(){
+        return Inertia::render('CategoryPage');
+    }
 
     function categoryStore(Request $request)
     {

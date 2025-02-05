@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\OtpMail;
 use Exception;
 use App\Models\User;
+use Inertia\Inertia;
+use App\Mail\OtpMail;
 use App\Helper\JwtToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,6 +14,30 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+
+    function register()
+    {
+        return Inertia::render('RegistrationPage');
+    }
+
+    function userLogin()
+    {
+        return Inertia::render('LoginPage');
+    }
+    function forgotPassword()
+    {
+        return Inertia::render('SendOtpPage');
+    }
+
+    function verifyOtp()
+    {
+        return Inertia::render('VerifyOtpPage');
+    }
+
+    function profile(Request $request)
+    {
+        return Inertia::render('ProfilePage');
+    }
 
     function registration(Request $request)
     {
@@ -25,77 +50,49 @@ class UserController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([
-                    'status' => 'failed',
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors(),
-                ], 422);
+                return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            $email = $request->input('email');
-            $name = $request->input('name');
-            $mobile = $request->input('mobile');
-            $password = Hash::make($request->input('password')); // Hash the password
-
-
             User::create([
-                'name' => $name,
-                'email' => $email,
-                'mobile' => $mobile,
-                'password' => $password,
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'mobile' => $request->input('mobile'),
+                'password' => Hash::make($request->input('password')),
             ]);
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'User Registration Successfully',
-            ], 200);
+            return redirect()->route('user-login')->with('success', 'User Registered Successfully!');
         } catch (Exception $e) {
-            return response()->json(['status' => 'failed', 'message' => $e->getMessage()], 500);
+            return redirect()->back()->with('error', 'Something went wrong!');
         }
     }
-
-
     function login(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Validation failed',
-                'errors' => $validator->errors(),
-            ], 422);
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $user = User::where('email', $request->input('email'))->first();
 
         if ($user && Hash::check($request->input('password'), $user->password)) {
-            $token = JwtToken::createTokenForUser($request->input('email'), $user->id);
-            return response()->json([
-                'status' => 'success',
-                'message' => 'User Login Successful',
-                'token' => $token
-            ], 200)->cookie('token', $token, time() + 60 * 24 * 30);
+            $request->session()->put('email', $user->email);
+            $request->session()->put('user_id', $user->id);
+
+            return redirect()->route('dashboardPage')->with('success', 'Login successful!');
         } else {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'unauthorized'
-            ], 401);
+            return redirect()->route('LoginPage')->with('error', 'Invalid email or password.');
         }
     }
 
     function logout(Request $request)
     {
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'User Logout Successfully',
-        ], 200)->cookie('token', '', -1);
-        // return redirect('/')->cookie('token','',-1);
-
+        $request->session()->flush();
+        return redirect()->route('LoginPage');
     }
     function sendOtpCode(Request $request)
     {

@@ -1,11 +1,11 @@
-<script setup>
-
-</script>
-
 <template>
 
 </template>
 
-<style scoped>
 
-</style>
+
+<script setup>
+import {useForm,router} from '@inertiajs/vue3'
+
+</script>
+

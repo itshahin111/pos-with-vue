@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+
+    function customerPage(){
+        return Inertia::render('CustomerPage');
+    }
+
     function customerStore(Request $request)
     {
         $user_id = $request->header('id');
