@@ -1,7 +1,7 @@
 <template>
-    <div class="container mt-5">
+   <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-5">
+            <div class="col-md-7 col-lg-6 center-screen">
                 <div class="card shadow-lg p-4">
                     <form @submit.prevent="submitForm">
                         <div class="card-header text-center bg-info text-white">

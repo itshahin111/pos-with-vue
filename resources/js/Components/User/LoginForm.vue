@@ -1,14 +1,13 @@
 <template>
-    <div class="container mt-5">
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-5">
+            <div class="col-md-7 col-lg-6 center-screen">
                 <div class="card shadow-lg p-4">
                     <form @submit.prevent="submitForm">
                         <div class="card-header text-center bg-info text-white">
                             <h4>Login Form</h4>
                         </div>
                         <div class="card-body">
-
                             <div class="form-group mb-3">
                                 <label for="email" class="form-label"
                                     >Email address</label
@@ -20,7 +19,6 @@
                                     placeholder="Enter email"
                                     v-model="form.email"
                                 />
-
                             </div>
                             <div class="form-group mb-3">
                                 <label for="password" class="form-label"
@@ -33,7 +31,6 @@
                                     placeholder="Password"
                                     v-model="form.password"
                                 />
-
                             </div>
                         </div>
                         <div class="card-footer text-center">
@@ -48,7 +45,10 @@
                                     Sign Up
                                 </Link>
                                 <span class="ms-1">|</span>
-                                <Link href="/forgot-password" class="btn btn-link">
+                                <Link
+                                    href="/forgot-password"
+                                    class="btn btn-link"
+                                >
                                     Forgot Password
                                 </Link>
                             </div>
@@ -88,7 +88,7 @@ function submitForm() {
         },
         onError: () => {
             toast.error("Login failed. Please check your credentials.");
-        }
+        },
     });
 }
 </script>

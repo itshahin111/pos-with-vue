@@ -1,12 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Mail\OtpMail;
-use App\Helper\JwtToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -14,7 +12,6 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-
     function register()
     {
         return Inertia::render('RegistrationPage');
@@ -24,6 +21,7 @@ class UserController extends Controller
     {
         return Inertia::render('LoginPage');
     }
+
     function forgotPassword()
     {
         return Inertia::render('SendOtpPage');
@@ -34,9 +32,14 @@ class UserController extends Controller
         return Inertia::render('VerifyOtpPage');
     }
 
-    function profile(Request $request)
+    function profile()
     {
         return Inertia::render('ProfilePage');
+    }
+
+    function resetPasswordPage()
+    {
+        return Inertia::render('ResetPasswordPage');
     }
 
     function registration(Request $request)
@@ -57,17 +60,17 @@ class UserController extends Controller
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'mobile' => $request->input('mobile'),
-                'password' => Hash::make($request->input('password')),
+                'password' => Hash::make($request->input('password')), // Hashing password properly
             ]);
 
-            return redirect()->route('user-login')->with('success', 'User Registered Successfully!');
+            return redirect()->route('LoginPage')->with('success', 'User Registered Successfully!');
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Something went wrong!');
         }
     }
+
     function login(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
@@ -94,87 +97,89 @@ class UserController extends Controller
         $request->session()->flush();
         return redirect()->route('LoginPage');
     }
-    function sendOtpCode(Request $request)
+
+     public function sendOtpCode(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email|exists:users,email'
+        ]);
 
         $email = $request->input('email');
         $otp = rand(100000, 999999);
         $user = User::where('email', $email)->first();
-        if ($user == 1) {
-            Mail::to($email)->send(new OtpMail($otp));
-            User::where('email', '=', $email)->update(['otp' => $otp]);
-            return response()->json([
-                'status' => 'success',
-                'message' => '6 Digit {$otp}Code has been send to your email !',
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Email not found',
-            ], 404);
+
+        if ($user) {
+            // Send OTP email
+            Mail::to($email)->send(new OTPMail($otp));
+
+            // Update user's OTP
+            $user->update(['otp' => $otp]);
+
+            // Store email in session
+            $request->session()->put('email', $email);
+
+            return redirect()->route('VerifyOtpPage')->with('status', true)->with('message', 'OTP Sent Successfully');
         }
 
+        return redirect()->route('SendOtpPage')->with('status', false)->with('message', 'Email Not Found');
     }
 
     function verifyOtpCode(Request $request)
     {
-        $email = $request->input('email');
-        $otp = $request->input('otp');
-        $user = User::where('email', '=', $email)
-            ->where('otp', '=', $otp)->count();
+        $email = $request->session()->get('email');
 
-        if ($user == 1) {
-            User::where('email', '=', $email)->update(['otp' => '0']);
-            $token = JwtToken::createPasswordResetToken($request->input('email'));
-            return response()->json([
-                'status' => 'success',
-                'message' => 'OTP Verification Successful',
-                'token' => $token
-            ], 200)->cookie('token', $token, 60 * 24 * 30);
+        $request->validate([
+            'otp' => 'required|digits:6',
+        ]);
 
+        $user = User::where('email', $email)->where('otp', $request->input('otp'))->first();
+
+        if ($user) {
+            $user->update(['otp' => '']);
+            $request->session()->put('otp_verify', 'yes');
+
+            return redirect()->route('ResetPasswordPage')->with('status',true)->with('message','OTP Verified Successfully');
         } else {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'unauthorized'
-            ], 200);
+            return redirect()->route('VerifyOtpPage')->with('status', false)->with('message', 'Invalid OTP');
         }
     }
-
 
     function resetPassword(Request $request)
     {
-
         try {
-            $email = $request->header('email');
-            $password = $request->input('password');
-            User::where('email', '=', $email)->update(['password' => $password]);
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Request Successful',
-            ], 200);
+            $email = $request->session()->get('email');
+            $otp_verify = $request->session()->get('otp_verify');
 
-        } catch (Exception $exception) {
-            return response()->json([
-                'status' => 'fail',
-                'message' => 'Something Went Wrong',
-            ], 200);
+            if ($otp_verify !== "yes") {
+                return redirect()->route('ResetPasswordPage')->with('error', 'Invalid OTP verification');
+            }
+
+            $request->validate([
+                'password' => 'required|string|min:8|confirmed',
+            ]);
+
+            User::where('email', $email)->update([
+                'password' => Hash::make($request->input('password'))
+            ]);
+
+            $request->session()->flush();
+            return redirect()->route('LoginPage')->with('status',true)->with ('message','Password reset successfully!');
+        } catch (Exception $e) {
+            return redirect()->route('ResetPasswordPage')->with('status',false)->with('message', 'Something went wrong');
         }
-
     }
-
 
     function userProfile(Request $request)
     {
         $email = $request->header('email');
-        $user = User::where('email', '=', $email)->first();
+        $user = User::where('email', $email)->first();
+
         return response()->json([
             'status' => 'success',
             'message' => 'Request Successful',
             'data' => $user
         ], 200);
     }
-
-
 
     function updateProfile(Request $request)
     {
@@ -183,23 +188,27 @@ class UserController extends Controller
             $name = $request->input('name');
             $mobile = $request->input('mobile');
             $password = $request->input('password');
-            User::where('email', '=', $email)->update([
+
+            $updateData = [
                 'name' => $name,
-                'email' => $email,
                 'mobile' => $mobile,
-                'password' => $password
-            ]);
+            ];
+
+            if ($password) {
+                $updateData['password'] = Hash::make($password);
+            }
+
+            User::where('email', $email)->update($updateData);
+
             return response()->json([
                 'status' => 'success',
-                'message' => 'Request Successful',
+                'message' => 'Profile updated successfully',
             ], 200);
-
         } catch (Exception $exception) {
             return response()->json([
                 'status' => 'fail',
-                'message' => 'Something Went Wrong',
-            ], 200);
+                'message' => 'Something went wrong',
+            ], 500);
         }
     }
-
 }

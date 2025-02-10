@@ -1,23 +1,23 @@
 :root {
     /* Main Color */
-    --themeColor: #21bf73;
-    --themeColorDark: #39B27B;
-    --themeLightColor: #56d598;
-    --secondaryColor: #B0EACD;
-    --themeDarkColor: #2E374F;
+    --themeColor: #007bff;
+    --themeColorDark: #0056b3;
+    --themeLightColor: #66b2ff;
+    --secondaryColor: #6c757d;
+    --themeDarkColor: #16191d;
     --themeWhiteColor: #ffffff;
 
     /* Greyscale Color */
-    --lightColor: #9EA3AE;
-    --lightDeepColor-1: #9EA3AE;
-    --lightDeepColor-2: #FAF8F6;
-    --lightDeepColor-3: #D3D5DA;
-    --lightDeepColor-4: #9EA3AE;
-    --darkColor: #6C727F;
-    --darkDeepColor-1: #4D5461;
-    --darkDeepColor-2: #394150;
-    --darkDeepColor-3: #212936;
-    --darkDeepColor-4: #0B0A0F;
+    --lightColor: #f8f9fa;
+    --lightDeepColor-1: #e9ecef;
+    --lightDeepColor-2: #dee2e6;
+    --lightDeepColor-3: #ced4da;
+    --lightDeepColor-4: #adb5bd;
+    --darkColor: #0f1316;
+    --darkDeepColor-1: #495057;
+    --darkDeepColor-2: #343a40;
+    --darkDeepColor-3: #212529;
+    --darkDeepColor-4: #121416;
 
     /* Typography */
     --headline-1: 52px;
@@ -27,8 +27,8 @@
     --bodyXLarge: 20px;
     --bodyLarge: 18px;
     --bodyMedium: 16px;
-    --bodySmal: 14px;
-    --bodyXSmal: 10px;
+    --bodySmall: 14px;
+    --bodyXSmall: 12px;
 }
 
 body {
@@ -37,50 +37,55 @@ body {
     padding: 0;
     background-color: var(--lightDeepColor-2);
     font-family: 'Poppins', sans-serif !important;
-    font-size: 14px;
+    font-size: var(--bodySmall);
 }
-a{
+
+a {
     cursor: pointer;
     color: inherit;
-}
-a:hover{
-    color: inherit;
+    text-decoration: none;
 }
 
+a:hover {
+    color: var(--themeColor);
+}
 
-.icon-nav{
+.icon-nav {
     padding: 6px;
     transition: 0.3s;
-    color: #606060;
+    color: var(--darkColor);
 }
-.icon-nav:hover{
-    transition: 0.3s;
-    color: #252526;
+
+.icon-nav:hover {
+    color: var(--themeColorDark);
 }
-.icon-nav:active{
+
+.icon-nav:active {
     border-radius: 50%;
     padding: 8px;
     transition: 0.3s;
-    color:#252526;
-    background:  rgba(0, 0, 0, 0.16);
+    color: var(--themeColorDark);
+    background: rgba(0, 0, 0, 0.16);
 }
-.icon-nav-img{
+
+.icon-nav-img {
     cursor: pointer;
     border-radius: 50%;
-    width: 25px ;
-    height: 25px ;
-    object-fit: cover;
-}
-.icon-nav-img-lg{
-    border-radius: 50%;
-    width: 65px ;
-    height: 65px ;
+    width: 25px;
+    height: 25px;
     object-fit: cover;
 }
 
-.side-nav-logo{
-    margin-top: 30px ;
-    margin-bottom: 20px ;
+.icon-nav-img-lg {
+    border-radius: 50%;
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+}
+
+.side-nav-logo {
+    margin-top: 30px;
+    margin-bottom: 20px;
     width: 80px;
     align-self: center;
 }
@@ -93,10 +98,11 @@ a:hover{
     left: 0;
     overflow-x: hidden;
     transition: 0.3s;
-    background-color: #252526;
-    scrollbar-color: #252526 #252526;
+    background-color: var(--themeDarkColor);
+    scrollbar-color: var(--themeDarkColor) var(--themeDarkColor);
     scrollbar-width: thin;
 }
+
 .side-nav-close {
     padding-top: 70px;
     height: 100%;
@@ -106,51 +112,54 @@ a:hover{
     left: 0;
     overflow-x: hidden;
     transition: 0.3s;
-    background-color: #252526;
-    scrollbar-color: #252526 #252526;
+    background-color: var(--themeDarkColor);
+    scrollbar-color: var(--themeDarkColor) var(--themeDarkColor);
     scrollbar-width: thin;
 }
+
 .side-nav-open::-webkit-scrollbar {
     width: 10px;
     height: 10px;
 }
-.side-nav-open::-webkit-scrollbar-track-piece  {
-    background-color: #F5F5F5;
+
+.side-nav-open::-webkit-scrollbar-track-piece {
+    background-color: var(--lightColor);
 }
+
 .side-nav-open::-webkit-scrollbar-thumb:vertical {
     height: 30px;
     border-radius: 4px;
-    background: #CCCCCC;
+    background: var(--darkColor);
 }
+
 .side-nav-close::-webkit-scrollbar {
     width: 10px;
     height: 10px;
 }
-.side-nav-close::-webkit-scrollbar-track-piece  {
-    background-color: #F5F5F5;
+
+.side-nav-close::-webkit-scrollbar-track-piece {
+    background-color: var(--lightColor);
 }
+
 .side-nav-close::-webkit-scrollbar-thumb:vertical {
     height: 30px;
     border-radius: 4px;
-    background: #CCCCCC;
+    background: var(--darkColor);
 }
 
-
-
-.top-navbar{
-    background: #ffffff;
+.top-navbar {
+    background: var(--themeWhiteColor);
     transition: 0.3s;
     margin-left: 240px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.03);
 }
-.top-navbar-expand{
-    background: #ffffff;
+
+.top-navbar-expand {
+    background: var(--themeWhiteColor);
     transition: 0.3s;
     margin-left: 0;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.03);
 }
-
-
 
 .content {
     margin-top: 70px;
@@ -169,37 +178,44 @@ a:hover{
     height: 30px;
 }
 
-.side-bar-item{
+.side-bar-item {
     text-decoration: none;
     display: inline-block;
     padding: 12px 5px 12px 12px;
     width: 100% !important;
+    color: var(--themeWhiteColor);
 }
-.side-bar-item:hover{
+
+.side-bar-item:hover {
     transition: 0.2s;
-    background-color: #535353;
+    background-color: var(--themeColorDark);
 }
+
 .side-bar-item:hover .side-bar-item-icon {
-    color: #fcfcff;
+    color: var(--themeWhiteColor);
 }
+
 .side-bar-item:hover .side-bar-item-caption {
-    color: #ffffff;
+    color: var(--themeWhiteColor);
 }
-.side-bar-item-active{
-    background-color: #535353;
+
+.side-bar-item-active {
+    background-color: var(--themeColorDark);
 }
-.side-bar-item-icon{
+
+.side-bar-item-icon {
     font-size: 18px;
     margin-left: 10px;
     margin-right: 10px;
     font-weight: 500;
-    color: #ffffff;
+    color: var(--themeWhiteColor);
 }
-.side-bar-item-caption{
-    font-family: 'Poppins', sans-serif ;
-    font-size: 14px;
+
+.side-bar-item-caption {
+    font-family: 'Poppins', sans-serif;
+    font-size: var(--bodySmall);
     font-weight: 500;
-    color: #ffffff;
+    color: var(--themeWhiteColor);
 }
 
 /* Responsive */
@@ -229,7 +245,7 @@ a:hover{
     }
 }
 
-@media (min-width:340px) and (max-width: 360.98px) {
+@media (min-width: 340px) and (max-width: 360.98px) {
     .side-nav-open {
         width: 0;
         position: fixed;
@@ -330,9 +346,31 @@ a:hover{
 }
 
 @media (min-width: 992px) and (max-width: 1199.98px) {
-
+    .side-nav-open {
+        width: 240px;
+    }
+    .side-nav-close {
+        width: 0;
+    }
+    .content {
+        margin-left: 240px;
+    }
+    .content-expand {
+        margin-left: 0;
+    }
 }
 
 @media (min-width: 1200px) {
-
+    .side-nav-open {
+        width: 240px;
+    }
+    .side-nav-close {
+        width: 0;
+    }
+    .content {
+        margin-left: 240px;
+    }
+    .content-expand {
+        margin-left: 0;
+    }
 }

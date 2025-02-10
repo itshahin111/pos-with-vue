@@ -4,7 +4,7 @@
 @import "sidebar.css";
 
 .text-green{
-    color:#41b883 !important;
+    color:#bb34fa !important;
 }
 
 .card{
@@ -12,8 +12,8 @@
 }
 
 .btn-success{
-    background: #41b883 !important;
-    border-color:  #41b883 !important;
+    background: #5176f0 !important;
+    border-color:  #05fff3 !important;
 }
 .center-screen{
     display: flex;
