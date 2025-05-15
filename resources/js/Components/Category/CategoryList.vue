@@ -64,5 +64,4 @@ const itemClick = (number,player) => {
     alert(`Number is=${number} & Player Name is=${player}`)
 }
 
-
 </script>

@@ -74,4 +74,8 @@ Route::middleware([SessionAuthMiddleware::class])->group(function () {
     Route::post('/invoice-details', [InvoiceController::class, 'invoiceDetails'])->name('invoiceDetails');
     Route::delete('/invoice-delete', [InvoiceController::class, 'invoiceDestroy'])->name('invoiceDestroy');
 
+
+    Route::get('/summary', [DashboardController::class, 'dashboardPage'])->name('dashboardPage');
+
+
 });

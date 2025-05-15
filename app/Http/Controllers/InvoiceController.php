@@ -14,7 +14,7 @@ class InvoiceController extends Controller
 {
     function salePage(){
         return Inertia::render('SalePage');
-    }
+    } 
     function invoicePage()
     {
         return Inertia::render('InvoiceListPage');

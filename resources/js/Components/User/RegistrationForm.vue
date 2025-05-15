@@ -1,5 +1,5 @@
 <template>
-   <div class="container">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-7 col-lg-6 center-screen">
                 <div class="card shadow-lg p-4">
@@ -9,67 +9,36 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group mb-3">
-                                <label for="name" class="form-label"
-                                    >Name</label
-                                >
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    id="name"
-                                    placeholder="Enter name"
-                                    v-model="form.name"
-                                />
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Enter name"
+                                    v-model="form.name" />
 
                             </div>
                             <div class="form-group mb-3">
-                                <label for="email" class="form-label"
-                                    >Email address</label
-                                >
-                                <input
-                                    type="email"
-                                    class="form-control"
-                                    id="email"
-                                    placeholder="Enter email"
-                                    v-model="form.email"
-                                />
+                                <label for="email" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="email" placeholder="Enter email"
+                                    v-model="form.email" />
 
                             </div>
                             <div class="form-group mb-3">
-                                <label for="mobile" class="form-label"
-                                    >Mobile</label
-                                >
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    id="mobile"
-                                    placeholder="Mobile"
-                                    v-model="form.mobile"
-                                />
+                                <label for="mobile" class="form-label">Mobile</label>
+                                <input type="text" class="form-control" id="mobile" placeholder="Mobile"
+                                    v-model="form.mobile" />
 
                             </div>
                             <div class="form-group mb-3">
-                                <label for="password" class="form-label"
-                                    >Password</label
-                                >
-                                <input
-                                    type="password"
-                                    class="form-control"
-                                    id="password"
-                                    placeholder="Password"
-                                    v-model="form.password"
-                                />
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" placeholder="Password"
+                                    v-model="form.password" />
 
                             </div>
                         </div>
                         <div class="card-footer text-center">
-                            <button
-                                type="submit"
-                                class="btn btn-success w-100 mb-2"
-                            >
+                            <button type="submit" class="btn btn-success w-100 mb-2">
                                 Register
                             </button>
                             <Link href="/login" class="btn btn-link">
-                                Already have an account?
+                            Already have an account?
                             </Link>
                         </div>
                     </form>
@@ -81,7 +50,7 @@
 
 <script setup>
 import { useToast } from "vue-toastification";
-import { useForm, router, usePage, Link} from "@inertiajs/vue3";
+import { useForm, router, usePage, Link } from "@inertiajs/vue3";
 
 const toast = useToast();
 

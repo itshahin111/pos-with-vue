@@ -14,7 +14,7 @@ class CategoryController extends Controller
     }
 
     function categoryStore(Request $request)
-    {
+    { 
         $request->validate([
             'name' => 'required|string|max:255',
         ]);

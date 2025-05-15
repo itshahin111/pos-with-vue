@@ -7,6 +7,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\TokenVerificationApiMiddleware;
 
 Route::post('/user-register', [UserController::class, 'registration'])->name('registration');
@@ -15,7 +16,7 @@ Route::get('/logout', [UserController::class, 'logout'])->name('logout'); // Its
 Route::post('/forgot-password', [UserController::class, 'sendOtpCode'])->name('forgotPassword');
 
 // Route Group with middleware
-Route::group(['middleware' => TokenVerificationApiMiddleware::class], function () {
+    Route::group(['middleware' => TokenVerificationApiMiddleware::class], function () {
     Route::post('/verify-otp', [UserController::class, 'verifyOtpCode'])->name('verifyOtpCode');
     Route::post('/reset-password', [UserController::class, 'ResetPassword'])->name('resetPassword');
     Route::post('/user-profile', [UserController::class, 'userProfile'])->name('userProfile');
@@ -51,6 +52,10 @@ Route::group(['middleware' => TokenVerificationApiMiddleware::class], function (
     Route::get('/invoice-show', [InvoiceController::class, 'invoiceShow'])->name('invoiceShow');
     Route::post('/invoice-details', [InvoiceController::class, 'invoiceDetails'])->name('invoiceDetails');
     Route::delete('/invoice-delete', [InvoiceController::class, 'invoiceDestroy'])->name('invoiceDestroy');
+
+
+    Route::get('/summary', [DashboardController::class, 'dashboardPage'])->name('dashboardPage');
+
 
 
 });
