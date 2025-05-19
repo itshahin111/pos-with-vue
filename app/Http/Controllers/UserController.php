@@ -5,10 +5,12 @@ use Exception;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Mail\OtpMail;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use RateLimiter;
 
 class UserController extends Controller
 {
@@ -71,34 +73,36 @@ class UserController extends Controller
 
     function login(Request $request)
     {
+        $email = (string) $request->input('email');
+        $throttleKey = Str::lower($email) . '|' . $request->ip();
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            return redirect()->back()->withErrors(['email' => 'Too many login attempts. Please try again in ' . $seconds . ' seconds.'])->withInput();
+        }
         $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255',
+            'email' => 'required|string|email',
             'password' => 'required|string|min:8',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
         $user = User::where('email', $request->input('email'))->first();
-
-        if ($user && Hash::check($request->input('password'), $user->password)) {
-            $request->session()->put('email', $user->email);
-            $request->session()->put('user_id', $user->id);
-
-            return redirect()->route('dashboardPage')->with('success', 'Login successful!');
-        } else {
-            return redirect()->route('LoginPage')->with('error', 'Invalid email or password.');
+        if (!$user || !Hash::check($request->input('password'), $user->password)) {
+            RateLimiter::hit($throttleKey);
+            return redirect()->back()->withErrors(['email' => 'Invalid credentials'])->withInput();
         }
-    }
+        RateLimiter::clear($throttleKey);
+        $request->session()->put('email', $user->email);
+        $request->session()->put('user_id', $user->id);
 
+        return redirect()->route('dashboardPage')->with('status', true)->with('message', 'Login Successfully');
+
+    }
     function logout(Request $request)
     {
         $request->session()->flush();
         return redirect()->route('LoginPage');
     }
 
-     public function sendOtpCode(Request $request)
+    public function sendOtpCode(Request $request)
     {
         $request->validate([
             'email' => 'required|email|exists:users,email'
@@ -138,7 +142,7 @@ class UserController extends Controller
             $user->update(['otp' => '']);
             $request->session()->put('otp_verify', 'yes');
 
-            return redirect()->route('ResetPasswordPage')->with('status',true)->with('message','OTP Verified Successfully');
+            return redirect()->route('ResetPasswordPage')->with('status', true)->with('message', 'OTP Verified Successfully');
         } else {
             return redirect()->route('VerifyOtpPage')->with('status', false)->with('message', 'Invalid OTP');
         }
@@ -163,9 +167,9 @@ class UserController extends Controller
             ]);
 
             $request->session()->flush();
-            return redirect()->route('LoginPage')->with('status',true)->with ('message','Password reset successfully!');
+            return redirect()->route('LoginPage')->with('status', true)->with('message', 'Password reset successfully!');
         } catch (Exception $e) {
-            return redirect()->route('ResetPasswordPage')->with('status',false)->with('message', 'Something went wrong');
+            return redirect()->route('ResetPasswordPage')->with('status', false)->with('message', 'Something went wrong');
         }
     }
 

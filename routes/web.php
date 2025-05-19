@@ -19,7 +19,9 @@ Route::get('/verify-otp', [UserController::class, 'verifyOtp'])->name('VerifyOtp
 
 // User Authentication Routes
 Route::post('/user-register', [UserController::class, 'registration'])->name('registration');
-Route::post('/user-login', [UserController::class, 'login'])->name('login');
+Route::post('/user-login', [UserController::class, 'login'])
+    ->middleware('throttle:5,1') // 5 attempt per 1 minute
+    ->name('login');
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 Route::post('/send-otp', [UserController::class, 'sendOtpCode'])->name('sendOtpCode');
 Route::post('/verify-otp-code', [UserController::class, 'verifyOtpCode'])->name('verifyOtpCode');

@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
@@ -9,6 +10,14 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\TokenVerificationApiMiddleware;
+
+// Public Routes (No Authentication Required)
+Route::get('/', [HomeController::class, 'index'])->name('HomePage');
+Route::post('/register', [UserController::class, 'registration']);
+Route::post('/login', [UserController::class, 'login']);
+Route::get('/forgot-password', [UserController::class, 'forgotPassword'])->name('SendOtpPage');
+Route::get('/verify-otp', [UserController::class, 'verifyOtp'])->name('VerifyOtpPage');
+
 
 Route::post('/user-register', [UserController::class, 'registration'])->name('registration');
 Route::post('/user-login', [UserController::class, 'login'])->name('login');
